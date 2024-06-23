@@ -13,6 +13,7 @@ const registerValidator = () => {
     check("city").not().isEmpty().withMessage("city cant be empty"),
     check("country").not().isEmpty().withMessage("country cant be empty"),
     check("roles").not().isEmpty().withMessage("roles cant be empty"),
+    check("password").not().isEmpty().withMessage("password cant be empty"),
   ];
 };
 

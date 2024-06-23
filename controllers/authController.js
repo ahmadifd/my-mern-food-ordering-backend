@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 import controller from "../routes/controller.js";
+import "dotenv/config";
 
 const login = async (req, res) => {
   const { email, password } = req.body;
@@ -15,6 +16,7 @@ const login = async (req, res) => {
   }
 
   const match = await bcrypt.compare(password, foundUser.password);
+
   if (!match)
     return res.status(401).json({
       message: "Unauthorized",
@@ -27,13 +29,13 @@ const login = async (req, res) => {
         roles: foundUser.roles,
       },
     },
-    process.env.accessTokenPrivateKey,
+    process.env.ACCESS_TOKEN_PRIVATE_KEY,
     { expiresIn: "500s" }
   );
 
   const refreshToken = jwt.sign(
     { email: foundUser.email },
-    process.env.refreshTokenPrivateKey,
+    process.env.REFRESH_TOKEN_PRIVATE_KEY,
     { expiresIn: "1d" }
   );
   foundUser.refreshToken = refreshToken;
@@ -63,7 +65,7 @@ const refresh = (req, res) => {
 
   jwt.verify(
     refreshToken,
-    process.env.refreshTokenPrivateKey,
+    process.env.REFRESH_TOKEN_PRIVATE_KEY,
     async (err, decode) => {
       if (err) return res.status(403).json({ message: "Forbidden" });
 
@@ -81,7 +83,7 @@ const refresh = (req, res) => {
             roles: foundUser.roles,
           },
         },
-        process.env.accessTokenPrivateKey,
+        process.env.ACCESS_TOKEN_PRIVATE_KEY,
         { expiresIn: "500s" }
       );
 

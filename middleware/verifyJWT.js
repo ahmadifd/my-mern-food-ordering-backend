@@ -9,7 +9,7 @@ export const verifyJWT = (req, res, next) => {
 
   const token = authHeader.split(" ")[1];
 
-  jwt.verify(token, process.env.accessTokenPrivateKey, (err, decoded) => {
+  jwt.verify(token, process.env.ACCESS_TOKEN_PRIVATE_KEY, (err, decoded) => {
     if (err) return controller.response({ res, status: 403 });
 
     req.user = decoded.UserInfo.userName;
