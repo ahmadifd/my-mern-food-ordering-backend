@@ -2,7 +2,6 @@ import { validationResult } from "express-validator";
 
 const validationBody = (req, res) => {
   const result = validationResult(req);
-  console.log(result);
   if (!result.isEmpty()) {
     const errors = result.array();
     const messages = [];
