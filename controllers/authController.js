@@ -24,8 +24,10 @@ const login = async (req, res) => {
 
   const accessToken = jwt.sign(
     {
-      email: foundUser.email,
-      roles: foundUser.roles,
+      UserAuthInfo: {
+        email: foundUser.email,
+        roles: foundUser.roles,
+      },
     },
     process.env.ACCESS_TOKEN_PRIVATE_KEY,
     { expiresIn: "500s" }
@@ -47,7 +49,7 @@ const login = async (req, res) => {
   });
 
   res.status(200).json({
-    accessToken,
+    accessToken ,
   });
 };
 
@@ -76,15 +78,17 @@ const refresh = (req, res) => {
 
       const accessToken = jwt.sign(
         {
-          email: foundUser.email,
-          roles: foundUser.roles,
+          UserAuthInfo: {
+            email: foundUser.email,
+            roles: foundUser.roles,
+          },
         },
         process.env.ACCESS_TOKEN_PRIVATE_KEY,
         { expiresIn: "500s" }
       );
 
       res.status(200).json({
-        accessToken,
+         accessToken ,
       });
     }
   );
