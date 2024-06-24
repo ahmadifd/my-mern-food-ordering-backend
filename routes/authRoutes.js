@@ -17,6 +17,6 @@ router
 
 router.route("/refresh").get(authController.refresh);
 
-router.route("/logout").post(authController.logout);
+router.route("/logout").post(authController.logOut);
 
 export default router;

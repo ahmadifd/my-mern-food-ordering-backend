@@ -24,7 +24,7 @@ const login = async (req, res) => {
 
   const accessToken = jwt.sign(
     {
-      UserAuthInfo: {
+      data: {
         email: foundUser.email,
         roles: foundUser.roles,
       },
@@ -49,7 +49,7 @@ const login = async (req, res) => {
   });
 
   res.status(200).json({
-    accessToken ,
+    accessToken,
   });
 };
 
@@ -78,7 +78,7 @@ const refresh = (req, res) => {
 
       const accessToken = jwt.sign(
         {
-          UserAuthInfo: {
+          data: {
             email: foundUser.email,
             roles: foundUser.roles,
           },
@@ -88,13 +88,13 @@ const refresh = (req, res) => {
       );
 
       res.status(200).json({
-         accessToken ,
+        accessToken,
       });
     }
   );
 };
 
-const logout = async (req, res) => {
+const logOut = async (req, res) => {
   const cookies = req.cookies;
   if (!cookies?.jwt) return res.status(204).json({});
   const refreshToken = cookies.jwt;
@@ -120,4 +120,4 @@ const logout = async (req, res) => {
   res.send({ message: "Cookie cleared" });
 };
 
-export default { login, refresh, logout };
+export default { login, refresh, logOut };
