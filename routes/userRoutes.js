@@ -13,4 +13,19 @@ router
     userController.register
   );
 
+router
+  .route("/editUser/:id")
+  .patch(
+    uservalidator.editUserValidator(),
+    controller.validate,
+    userController.editUser
+  );
+
+router
+  .route("/getUser/:email")
+  .get(
+    uservalidator.getUserValidator(),
+    controller.validate,
+    userController.getUser
+  );
 export default router;

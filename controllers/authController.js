@@ -49,7 +49,9 @@ const login = async (req, res) => {
   });
 
   res.status(200).json({
-    accessToken,
+    data: {
+      accessToken,
+    },
   });
 };
 
@@ -88,7 +90,9 @@ const refresh = (req, res) => {
       );
 
       res.status(200).json({
-        accessToken,
+        data: {
+          accessToken,
+        },
       });
     }
   );
