@@ -32,13 +32,11 @@ const editUserValidator = () => {
 };
 
 const getUserValidator = () => {
-  return [
-    check("email").not().isEmpty().isEmail().withMessage("email is invalid"),
-  ];
+  return [check("id").not().isEmpty().withMessage("id cant be empty")];
 };
 
 export default {
   registerValidator,
   editUserValidator,
-  getUserValidator
+  getUserValidator,
 };

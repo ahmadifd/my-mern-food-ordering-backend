@@ -25,12 +25,13 @@ const login = async (req, res) => {
   const accessToken = jwt.sign(
     {
       data: {
+        userId: foundUser.id,
         email: foundUser.email,
         roles: foundUser.roles,
       },
     },
     process.env.ACCESS_TOKEN_PRIVATE_KEY,
-    { expiresIn: "500s" }
+    { expiresIn: "5s" }
   );
 
   const refreshToken = jwt.sign(
@@ -81,12 +82,13 @@ const refresh = (req, res) => {
       const accessToken = jwt.sign(
         {
           data: {
+            userId: foundUser.id,
             email: foundUser.email,
             roles: foundUser.roles,
           },
         },
         process.env.ACCESS_TOKEN_PRIVATE_KEY,
-        { expiresIn: "500s" }
+        { expiresIn: "5s" }
       );
 
       res.status(200).json({

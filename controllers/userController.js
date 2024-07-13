@@ -51,7 +51,7 @@ const editUser = async (req, res) => {
   const user = await User.findOne({ _id: id });
 
   if (!user) {
-    return controller.response({ res, status: 400, message: "User not found" });
+    return res.status(400).json({ message: "User not found" });
   }
 
   user.name = name;
@@ -76,17 +76,18 @@ const editUser = async (req, res) => {
 };
 
 const getUser = async (req, res) => {
-  if (req?.params?.email === undefined)
+  if (req?.params?.id === undefined)
     return res.status(400).json({
-      message: "Error email",
+      message: "Error id",
     });
-  const email = req?.params?.email;
-  const findUser = await User.findOne({ email }).select(
+  const id = req?.params?.id;
+  console.log(id);
+  const findUser = await User.findOne({ _id: id }).select(
     "-password -refreshToken"
   );
   if (!findUser) {
     return res.status(204).json({
-      message: `No User matches Email ${email}.`,
+      message: `No User matches id ${id}.`,
     });
   }
   res.status(200).json({
