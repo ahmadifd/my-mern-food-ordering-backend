@@ -18,20 +18,17 @@ const getRestaurant = async (req, res) => {
 
   const userId = req.userId;
 
-  const findRestaurant = await Restaurant.findOne({ user: userId });
-  if (!findRestaurant) {
+  const restaurant = await Restaurant.findOne({ user: userId });
+  if (!restaurant) {
     return res.status(204).json({
       message: `No Restaurant matches userId ${req.userId}.`,
     });
   }
 
   //console.log(findRestaurant);
-  findRestaurant.imageUrl =
-    "http://localhost:3800//uploads/" + findRestaurant.imageUrl;
-  console.log(findRestaurant.imageUrl);
-  res.status(200).json({
-    data: findRestaurant,
-  });
+  restaurant.imageUrl = "http://localhost:3800//uploads/" + restaurant.imageUrl;
+  console.log(restaurant.imageUrl);
+  res.status(200).json(restaurant);
 };
 
 const createRestaurant = async (req, res) => {
@@ -89,7 +86,9 @@ const createRestaurant = async (req, res) => {
     console.log(restaurant);
 
     await restaurant.save();
-    res.status(201).send(restaurant);
+    restaurant.imageUrl =
+      "http://localhost:3800//uploads/" + restaurant.imageUrl;
+    res.status(201).json(restaurant);
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Something went wrong" });
@@ -130,8 +129,7 @@ const editRestaurant = async (req, res) => {
     restaurant.cuisines = cuisines;
     restaurant.menuItems = menuItems;
 
-
-     if (req.files.imageFile) {
+    if (req.files.imageFile) {
       const file = req.files.imageFile[0];
       const fsPromises = fs.promises;
       const filename = "imageFile-" + Date.now();
@@ -151,7 +149,10 @@ const editRestaurant = async (req, res) => {
     console.log(restaurant);
 
     await restaurant.save();
-    res.status(200).send(restaurant);
+    restaurant.imageUrl =
+      "http://localhost:3800//uploads/" + restaurant.imageUrl;
+
+    res.status(200).json(restaurant);
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Something went wrong" });
