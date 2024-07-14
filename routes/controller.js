@@ -7,7 +7,7 @@ const validationBody = (req, res) => {
     const messages = [];
     errors.forEach((err) => messages.push(err.msg));
     console.log(messages);
-    res.status(200).json({
+    res.status(400).json({
       message: "validation error",
       data: messages,
     });

@@ -27,7 +27,6 @@ const getRestaurant = async (req, res) => {
 
   //console.log(findRestaurant);
   restaurant.imageUrl = "http://localhost:3800//uploads/" + restaurant.imageUrl;
-  console.log(restaurant.imageUrl);
   res.status(200).json(restaurant);
 };
 
@@ -82,8 +81,6 @@ const createRestaurant = async (req, res) => {
     restaurant.imageUrl = filefullname;
     restaurant.user = new mongoose.Types.ObjectId(req.userId);
     restaurant.lastUpdated = new Date();
-
-    console.log(restaurant);
 
     await restaurant.save();
     restaurant.imageUrl =
@@ -146,7 +143,6 @@ const editRestaurant = async (req, res) => {
 
     restaurant.lastUpdated = new Date();
 
-    console.log(restaurant);
 
     await restaurant.save();
     restaurant.imageUrl =
