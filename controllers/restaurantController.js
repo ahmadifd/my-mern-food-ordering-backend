@@ -28,19 +28,7 @@ const searchRestaurant = async (req, res) => {
     const selectedCuisines = req.query.selectedCuisines ?? "";
     const sortOption = req.query.sortOption ?? "lastUpdated";
     const page = parseInt(req.query.page ?? "1");
-
-    console.log(
-      "city",
-      city,
-      "searchQuery",
-      searchQuery,
-      "selectedCuisines",
-      selectedCuisines,
-      "sortOption",
-      sortOption,
-      "page",
-      page
-    );
+    const pageSize = parseInt(req.query.pageSize ?? "10");
 
     let query = {};
 
@@ -73,17 +61,26 @@ const searchRestaurant = async (req, res) => {
       ];
     }
 
-    const pageSize = 10;
     const skip = (page - 1) * pageSize;
 
     // sortOption = "lastUpdated"
-    const restaurants = await Restaurant.find(query)
-      .sort({ [sortOption]: 1 })
-      .skip(skip)
-      .limit(pageSize)
-      .lean();
+    const restaurants = await Restaurant.aggregate([
+      { $match: query },
+      { $sort: { [sortOption]: 1 } },
+      { $skip: skip },
+      { $limit: pageSize },
+      {
+        $project: {
+          imageUrl: {
+            $concat: ["http://localhost:3800//uploads/" , "$imageUrl"],
+          },
+        },
+      },
+    ]);
 
     const total = await Restaurant.countDocuments(query);
+
+    console.log(restaurants);
 
     const response = {
       data: restaurants,
