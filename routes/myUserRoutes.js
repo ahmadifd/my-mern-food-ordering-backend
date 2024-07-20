@@ -23,7 +23,7 @@ router
   .patch(
     uservalidator.editUserValidator(),
     controller.validate,
-    verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Manager, ROLES_LIST.User),
+    verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Owner, ROLES_LIST.User),
     userController.editUser
   );
 
@@ -32,7 +32,7 @@ router
   .get(
     uservalidator.getUserValidator(),
     controller.validate,
-    verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Manager, ROLES_LIST.User),
+    verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Owner, ROLES_LIST.User),
     userController.getUser
   );
 export default router;

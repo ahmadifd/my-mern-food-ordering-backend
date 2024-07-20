@@ -1,14 +1,10 @@
 import Restaurant from "../models/Restaurant.js";
-import jwt from "jsonwebtoken";
-import controller from "../routes/controller.js";
-import bcrypt from "bcrypt";
 import mongoose from "mongoose";
 import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const getRestaurant = async (req, res) => {
   if (req.userId === undefined)

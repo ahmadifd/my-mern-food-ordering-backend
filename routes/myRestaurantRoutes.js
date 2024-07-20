@@ -6,7 +6,7 @@ import { verifyJWT } from "../middleware/verifyJWT.js";
 import ROLES_LIST from "../config/roles_list.js";
 import { verifyRoles } from "../middleware/verifyRoles.js";
 import multer from "multer";
-import path from "path";
+
 
 const router = express.Router();
 
@@ -26,7 +26,7 @@ router
     upload.fields([{ name: "imageFile", maxCount: 1 }]),
     myRestaurantValidator.editRestaurantValidator(),
     controller.validate,
-    verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Manager, ROLES_LIST.User),
+    verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Owner, ROLES_LIST.User),
     myRestaurantController.editRestaurant
   );
 
@@ -34,14 +34,14 @@ router.route("/createRestaurant").post(
   upload.fields([{ name: "imageFile", maxCount: 1 }]),
   myRestaurantValidator.createRestaurantValidator(),
   controller.validate,
-  verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Manager, ROLES_LIST.User),
+  verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Owner, ROLES_LIST.User),
   myRestaurantController.createRestaurant
 );
 
 router
   .route("/getRestaurant")
   .get(
-    verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Manager, ROLES_LIST.User),
+    verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Owner, ROLES_LIST.User),
     myRestaurantController.getRestaurant
   );
 export default router;
