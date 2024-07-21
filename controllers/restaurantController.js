@@ -13,7 +13,8 @@ const getRestaurant = async (req, res) => {
     if (!restaurant) {
       return res.status(404).json({ message: "restaurant not found" });
     }
-
+    restaurant.imageUrl =
+      "http://localhost:3800//uploads/" + restaurant.imageUrl;
     res.json(restaurant);
   } catch (error) {
     console.log(error);
