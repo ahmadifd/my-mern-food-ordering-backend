@@ -71,8 +71,17 @@ const searchRestaurant = async (req, res) => {
       { $limit: pageSize },
       {
         $project: {
+          _id: 1,
+          user: 1,
+          restaurantName: 1,
+          city: 1,
+          country: 1,
+          deliveryPrice: 1,
+          estimatedDeliveryTime: 1,
+          cuisines: 1,
+          menuItems: 1,
           imageUrl: {
-            $concat: ["http://localhost:3800//uploads/" , "$imageUrl"],
+            $concat: ["http://localhost:3800//uploads/", "$imageUrl"],
           },
         },
       },
