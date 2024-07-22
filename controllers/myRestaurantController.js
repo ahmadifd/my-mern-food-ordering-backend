@@ -23,6 +23,7 @@ const getRestaurant = async (req, res) => {
 
   //console.log(findRestaurant);
   restaurant.imageUrl = "http://localhost:3800//uploads/" + restaurant.imageUrl;
+
   res.status(200).json(restaurant);
 };
 
@@ -120,7 +121,32 @@ const editRestaurant = async (req, res) => {
     restaurant.estimatedDeliveryTime = Number(estimatedDeliveryTime);
 
     restaurant.cuisines = cuisines;
-    restaurant.menuItems = menuItems;
+
+    const existingMenuItem = restaurant.menuItems.filter((menuItem) =>
+      menuItems.map((item) => item._id).includes(menuItem._id.toHexString())
+    );
+    const deletedMenuItem = restaurant.menuItems.filter(
+      (menuItem) =>
+        !menuItems.map((item) => item._id).includes(menuItem._id.toHexString())
+    );
+    const addMenuItem = menuItems.filter((menuItem) => menuItem._id === "");
+
+    console.log(
+      "existingMenuItem",
+      existingMenuItem,
+      "deletedMenuItem",
+      deletedMenuItem,
+      "addMenuItem",
+      addMenuItem
+    );
+    //restaurant.menuItems.remove(deletedMenuItem);
+    //restaurant.menuItems.push(addMenuItem);
+
+    restaurant.menuItems = menuItems.map((item) => ({
+      _id: item._id ? new mongoose.Types.ObjectId(item._id) : mongoose.Types.ObjectId(),
+      name: item.name,
+      price: item.price,
+    }));
 
     if (req.files.imageFile) {
       const file = req.files.imageFile[0];
@@ -138,7 +164,6 @@ const editRestaurant = async (req, res) => {
     }
 
     restaurant.lastUpdated = new Date();
-
 
     await restaurant.save();
     restaurant.imageUrl =
