@@ -3,7 +3,6 @@ import expressValidator, { param } from "express-validator";
 const check = expressValidator.check;
 
 const searchRestaurantValidator = () => {
-  const name = "asdas";
   return [
     param("city")
       .isString()

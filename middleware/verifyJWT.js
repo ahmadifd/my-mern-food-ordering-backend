@@ -2,9 +2,7 @@ import jwt from "jsonwebtoken";
 import controller from "../routes/controller.js";
 
 export const verifyJWT = (req, res, next) => {
-
   const authHeader = req.headers.authorization || req.headers.Authorization;
-
 
   if (!authHeader?.startsWith("Bearer "))
     return res.status(401).json({ message: "" });

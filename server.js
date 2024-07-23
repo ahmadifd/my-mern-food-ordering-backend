@@ -5,6 +5,7 @@ import authRoutes from "./routes/authRoutes.js";
 import myUserRoutes from "./routes/myUserRoutes.js";
 import myRestaurantRoutes from "./routes/myRestaurantRoutes.js";
 import restaurantRoutes from "./routes/restaurantRoutes.js";
+import orderRoutes from "./routes/orderRoutes.js";
 import cors from "cors";
 import { corsOptions } from "./config/corsOptions.js";
 import cookieParser from "cookie-parser";
@@ -40,6 +41,8 @@ app.use("/my/user", myUserRoutes);
 app.use("/my/restaurant", myRestaurantRoutes);
 
 app.use("/restaurant", restaurantRoutes);
+
+app.use("/order", orderRoutes);
 
 mongoose.connection.once("open", () => {
   console.log("Connected to MongoDB");
