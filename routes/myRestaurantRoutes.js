@@ -7,7 +7,6 @@ import ROLES_LIST from "../config/roles_list.js";
 import { verifyRoles } from "../middleware/verifyRoles.js";
 import multer from "multer";
 
-
 const router = express.Router();
 
 const storage = multer.memoryStorage();
@@ -30,13 +29,15 @@ router
     myRestaurantController.editRestaurant
   );
 
-router.route("/createRestaurant").post(
-  upload.fields([{ name: "imageFile", maxCount: 1 }]),
-  myRestaurantValidator.createRestaurantValidator(),
-  controller.validate,
-  verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Owner, ROLES_LIST.User),
-  myRestaurantController.createRestaurant
-);
+router
+  .route("/createRestaurant")
+  .post(
+    upload.fields([{ name: "imageFile", maxCount: 1 }]),
+    myRestaurantValidator.createRestaurantValidator(),
+    controller.validate,
+    verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Owner, ROLES_LIST.User),
+    myRestaurantController.createRestaurant
+  );
 
 router
   .route("/getRestaurant")
@@ -44,4 +45,21 @@ router
     verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Owner, ROLES_LIST.User),
     myRestaurantController.getRestaurant
   );
+
+router
+  .route("/order")
+  .get(
+    verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Owner),
+    myRestaurantController.getRestaurantOrders
+  );
+
+router
+  .route("/order/:orderId/status")
+  .put(
+    myRestaurantValidator.updateOrderStatusValidator(),
+    controller.validate,
+    verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Owner),
+    myRestaurantController.updateOrderStatus
+  );
+
 export default router;

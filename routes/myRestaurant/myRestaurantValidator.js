@@ -3,7 +3,6 @@ import expressValidator, { checkSchema, body } from "express-validator";
 const check = expressValidator.check;
 
 const createRestaurantValidator = () => {
-  const name = "asdas";
   return [
     //name.not().isEmpty().withMessage("name1111 cant be empty"),
 
@@ -50,7 +49,6 @@ const createRestaurantValidator = () => {
 };
 
 const editRestaurantValidator = () => {
-  const name = "asdas";
   return [
     checkSchema({
       imageFile: {
@@ -96,7 +94,12 @@ const editRestaurantValidator = () => {
   ];
 };
 
+const updateOrderStatusValidator = () => {
+  return [check("status").not().isEmpty().withMessage("status cant be empty")];
+};
+
 export default {
   createRestaurantValidator,
   editRestaurantValidator,
+  updateOrderStatusValidator,
 };

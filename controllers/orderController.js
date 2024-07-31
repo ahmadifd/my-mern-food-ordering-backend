@@ -1,11 +1,49 @@
 import Order from "../models/Order.js";
 import Restaurant from "../models/Restaurant.js";
+import mongoose from "mongoose";
 
 const getMyOrders = async (req, res) => {
   try {
-    const orders = await Order.find({ user: req.userId })
-      .populate("restaurant")
-      .populate("user");
+    let qry = {};
+    qry["status"] = "paid";
+    const orders = await Order.aggregate([
+      //{ $match: qry },
+      { $match: { user: new mongoose.Types.ObjectId(req.userId) } },
+      {
+        $lookup: {
+          from: "restaurants",
+          localField: "restaurant",
+          foreignField: "_id",
+          as: "restaurant",
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "user",
+          foreignField: "_id",
+          as: "user",
+        },
+      },
+      {
+        $unwind: "$restaurant",
+      },
+      {
+        $unwind: "$user",
+      },
+      {
+        $addFields: {
+          restaurant: {
+            imageUrl: {
+              $concat: [
+                "http://localhost:3800//uploads/",
+                "$restaurant.imageUrl",
+              ],
+            },
+          },
+        },
+      },
+    ]);
 
     res.json(orders);
   } catch (error) {
@@ -15,7 +53,7 @@ const getMyOrders = async (req, res) => {
 };
 
 const stripeWebhookHandler = async (req, res) => {
-  console.log('stripeWebhookHandler');
+  console.log("stripeWebhookHandler");
   const { orderId, totalPrice } = req.body;
   const order = await Order.findById(orderId);
 
@@ -59,6 +97,8 @@ const createCheckoutSession = async (req, res) => {
         (x) => x.menuItemId === restaurant.menuItems[i]._id.toHexString()
       );
 
+      console.log(cartitem);
+
       totalPrice +=
         parseFloat(cartitem.quantity) * restaurant.menuItems[i].price;
     }
@@ -67,8 +107,6 @@ const createCheckoutSession = async (req, res) => {
     if (restaurant?.deliveryPrice) {
       totalWithDelivery += parseFloat(restaurant.deliveryPrice);
     }
-
-    console.log(totalWithDelivery);
 
     const order = await newOrder.save();
     res.json({

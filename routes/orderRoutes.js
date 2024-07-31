@@ -28,7 +28,7 @@ router
   );
 
 router
-  .route("/")
+  .route("/getMyOrders")
   .get(
     verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Owner, ROLES_LIST.User),
     orderController.getMyOrders

@@ -1,4 +1,5 @@
 import Restaurant from "../models/Restaurant.js";
+import Order from "../models/Order.js";
 import mongoose from "mongoose";
 import path from "path";
 import fs from "fs";
@@ -179,15 +180,49 @@ const editRestaurant = async (req, res) => {
 };
 
 const getRestaurantOrders = async (req, res) => {
+  console.log("hello");
   try {
     const restaurant = await Restaurant.findOne({ user: req.userId });
     if (!restaurant) {
       return res.status(404).json({ message: "restaurant not found" });
     }
-
-    const orders = await Order.find({ restaurant: restaurant._id })
-      .populate("restaurant")
-      .populate("user");
+    const orders = await Order.aggregate([
+      { $match: { restaurant: new mongoose.Types.ObjectId(restaurant._id) } },
+      {
+        $lookup: {
+          from: "restaurants",
+          localField: "restaurant",
+          foreignField: "_id",
+          as: "restaurant",
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "user",
+          foreignField: "_id",
+          as: "user",
+        },
+      },
+      {
+        $unwind: "$restaurant",
+      },
+      {
+        $unwind: "$user",
+      },
+      {
+        $addFields: {
+          restaurant: {
+            imageUrl: {
+              $concat: [
+                "http://localhost:3800//uploads/",
+                "$restaurant.imageUrl",
+              ],
+            },
+          },
+        },
+      },
+    ]);
 
     res.json(orders);
   } catch (error) {
