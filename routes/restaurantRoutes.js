@@ -8,12 +8,12 @@ import restaurantValidator from "./restaurant/restaurantValidator.js";
 
 const router = express.Router();
 
-router.use(verifyJWT);
+// router.use(verifyJWT);
 
 router
   .route("/getRestaurant/:restaurantId")
   .get(
-    verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Owner, ROLES_LIST.User),
+    // verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Owner, ROLES_LIST.User),
     restaurantController.getRestaurant
   );
 
@@ -22,7 +22,7 @@ router
   .get(
     restaurantValidator.searchRestaurantValidator(),
     controller.validate,
-    verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Owner, ROLES_LIST.User),
+    // verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Owner, ROLES_LIST.User),
     restaurantController.searchRestaurant
   );
 
