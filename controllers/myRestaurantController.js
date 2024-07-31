@@ -180,7 +180,6 @@ const editRestaurant = async (req, res) => {
 };
 
 const getRestaurantOrders = async (req, res) => {
-  console.log("hello");
   try {
     const restaurant = await Restaurant.findOne({ user: req.userId });
     if (!restaurant) {
