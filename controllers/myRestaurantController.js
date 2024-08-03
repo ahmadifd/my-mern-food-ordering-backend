@@ -31,77 +31,77 @@ const getRestaurant = async (req, res) => {
 };
 
 const createRestaurant = async (req, res) => {
-  if (!fs.existsSync(path.join(__dirname, "../public/uploads"))) {
-    console.log("Hello Farshid");
+  // if (!fs.existsSync(path.join(__dirname, "../public/uploads"))) {
+  //   console.log("Hello Farshid");
 
-    // fs.mkdir(path.join(__dirname, "../public/uploads"), (err) => {
-    //   if (err) throw err;
-    // });
-  }
-
-  // if (req.userId === undefined)
-  //   return res.status(400).json({
-  //     message: "Error userId",
+  //   fs.mkdir(path.join(__dirname, "../public/uploads"), (err) => {
+  //     if (err) throw err;
   //   });
-
-  // const userId = req.userId;
-
-  // try {
-  //   const existingRestaurant = await Restaurant.findOne({ user: userId });
-  //   if (existingRestaurant) {
-  //     return res
-  //       .status(409)
-  //       .json({ message: "User restaurant already exists" });
-  //   }
-
-  //   const {
-  //     restaurantName,
-  //     city,
-  //     country,
-  //     deliveryPrice,
-  //     estimatedDeliveryTime,
-  //     cuisines,
-  //     menuItems,
-  //   } = req.body;
-
-  //   const file = req.files.imageFile[0];
-  //   const fsPromises = fs.promises;
-  //   const filename = "imageFile-" + Date.now();
-  //   const extname = file.originalname.slice(
-  //     file.originalname.lastIndexOf(".") + 1
-  //   );
-  //   const filefullname = filename + "." + extname;
-
-  //   await fsPromises.writeFile(
-  //     path.join("./public/uploads", filefullname),
-  //     file.buffer
-  //   );
-
-  //   const restaurant = new Restaurant();
-  //   restaurant.restaurantName = restaurantName;
-  //   restaurant.city = city;
-  //   restaurant.country = country;
-  //   restaurant.deliveryPrice = Number(deliveryPrice);
-  //   restaurant.estimatedDeliveryTime = Number(estimatedDeliveryTime);
-
-  //   restaurant.cuisines = cuisines;
-  //   restaurant.menuItems = menuItems.map((item) => ({
-  //     ...item,
-  //     _id: mongoose.Types.ObjectId(),
-  //   }));
-
-  //   restaurant.imageUrl = filefullname;
-  //   restaurant.user = new mongoose.Types.ObjectId(req.userId);
-  //   restaurant.lastUpdated = new Date();
-
-  //   await restaurant.save();
-  //   restaurant.imageUrl =
-  //     process.env.VITE_API_BASE_URL + "//uploads/" + restaurant.imageUrl;
-  //   res.status(201).json(restaurant);
-  // } catch (error) {
-  //   console.log(error);
-  //   res.status(500).json({ message: "Something went wrong" });
   // }
+
+  if (req.userId === undefined)
+    return res.status(400).json({
+      message: "Error userId",
+    });
+
+  const userId = req.userId;
+
+  try {
+    const existingRestaurant = await Restaurant.findOne({ user: userId });
+    if (existingRestaurant) {
+      return res
+        .status(409)
+        .json({ message: "User restaurant already exists" });
+    }
+
+    const {
+      restaurantName,
+      city,
+      country,
+      deliveryPrice,
+      estimatedDeliveryTime,
+      cuisines,
+      menuItems,
+    } = req.body;
+
+    const file = req.files.imageFile[0];
+    const fsPromises = fs.promises;
+    const filename = "imageFile-" + Date.now();
+    const extname = file.originalname.slice(
+      file.originalname.lastIndexOf(".") + 1
+    );
+    const filefullname = filename + "." + extname;
+
+    await fsPromises.writeFile(
+      path.join("./public/uploads", filefullname),
+      file.buffer
+    );
+
+    const restaurant = new Restaurant();
+    restaurant.restaurantName = restaurantName;
+    restaurant.city = city;
+    restaurant.country = country;
+    restaurant.deliveryPrice = Number(deliveryPrice);
+    restaurant.estimatedDeliveryTime = Number(estimatedDeliveryTime);
+
+    restaurant.cuisines = cuisines;
+    restaurant.menuItems = menuItems.map((item) => ({
+      ...item,
+      _id: mongoose.Types.ObjectId(),
+    }));
+
+    restaurant.imageUrl = filefullname;
+    restaurant.user = new mongoose.Types.ObjectId(req.userId);
+    restaurant.lastUpdated = new Date();
+
+    await restaurant.save();
+    restaurant.imageUrl =
+      process.env.VITE_API_BASE_URL + "//uploads/" + restaurant.imageUrl;
+    res.status(201).json(restaurant);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Something went wrong" });
+  }
 };
 
 const editRestaurant = async (req, res) => {
