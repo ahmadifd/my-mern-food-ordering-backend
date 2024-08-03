@@ -36,7 +36,7 @@ const getMyOrders = async (req, res) => {
           restaurant: {
             imageUrl: {
               $concat: [
-                "http://localhost:3800//uploads/",
+                process.env.VITE_API_BASE_URL + "//uploads/",
                 "$restaurant.imageUrl",
               ],
             },
@@ -98,12 +98,10 @@ const createCheckoutSession = async (req, res) => {
           checkoutSessionRequest.cartItems[i].menuItemId === x._id.toHexString()
       );
 
-    
       totalPrice +=
         parseFloat(mitem.price) * checkoutSessionRequest.cartItems[i].quantity;
     }
 
- 
     let totalWithDelivery = totalPrice;
     if (restaurant?.deliveryPrice) {
       totalWithDelivery += parseFloat(restaurant.deliveryPrice);
@@ -111,7 +109,9 @@ const createCheckoutSession = async (req, res) => {
 
     const order = await newOrder.save();
     res.json({
-      url: `http://localhost:5075/pay-page/${order._id}?totalPrice=${totalWithDelivery}`,
+      url:
+        process.env.RETURN_URL +
+        `/pay-page/${order._id}?totalPrice=${totalWithDelivery}`,
     });
   } catch (error) {
     console.log(error);

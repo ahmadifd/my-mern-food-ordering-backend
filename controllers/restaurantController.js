@@ -14,7 +14,7 @@ const getRestaurant = async (req, res) => {
       return res.status(404).json({ message: "restaurant not found" });
     }
     restaurant.imageUrl =
-      "http://localhost:3800//uploads/" + restaurant.imageUrl;
+    process.env.VITE_API_BASE_URL + "//uploads/" + restaurant.imageUrl;
     res.json(restaurant);
   } catch (error) {
     console.log(error);
@@ -82,7 +82,7 @@ const searchRestaurant = async (req, res) => {
           cuisines: 1,
           menuItems: 1,
           imageUrl: {
-            $concat: ["http://localhost:3800//uploads/", "$imageUrl"],
+            $concat: [ process.env.VITE_API_BASE_URL + "//uploads/" , "$imageUrl"],
           },
         },
       },

@@ -23,7 +23,8 @@ const getRestaurant = async (req, res) => {
   }
 
   //console.log(findRestaurant);
-  restaurant.imageUrl = "http://localhost:3800//uploads/" + restaurant.imageUrl;
+  restaurant.imageUrl =
+    process.env.VITE_API_BASE_URL + "//uploads/" + restaurant.imageUrl;
 
   res.status(200).json(restaurant);
 };
@@ -85,7 +86,7 @@ const createRestaurant = async (req, res) => {
 
     await restaurant.save();
     restaurant.imageUrl =
-      "http://localhost:3800//uploads/" + restaurant.imageUrl;
+    process.env.VITE_API_BASE_URL + "//uploads/" + restaurant.imageUrl;
     res.status(201).json(restaurant);
   } catch (error) {
     console.log(error);
@@ -173,7 +174,7 @@ const editRestaurant = async (req, res) => {
 
     await restaurant.save();
     restaurant.imageUrl =
-      "http://localhost:3800//uploads/" + restaurant.imageUrl;
+    process.env.VITE_API_BASE_URL + "//uploads/" + restaurant.imageUrl;
 
     res.status(200).json(restaurant);
   } catch (error) {
@@ -217,7 +218,7 @@ const getRestaurantOrders = async (req, res) => {
           restaurant: {
             imageUrl: {
               $concat: [
-                "http://localhost:3800//uploads/",
+                process.env.VITE_API_BASE_URL + "//uploads/" ,
                 "$restaurant.imageUrl",
               ],
             },
