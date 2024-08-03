@@ -36,62 +36,63 @@ const createRestaurant = async (req, res) => {
     });
 
   const userId = req.userId;
+  console.log(userId);
 
-  try {
-    const existingRestaurant = await Restaurant.findOne({ user: userId });
-    if (existingRestaurant) {
-      return res
-        .status(409)
-        .json({ message: "User restaurant already exists" });
-    }
+  // try {
+  //   const existingRestaurant = await Restaurant.findOne({ user: userId });
+  //   if (existingRestaurant) {
+  //     return res
+  //       .status(409)
+  //       .json({ message: "User restaurant already exists" });
+  //   }
 
-    const {
-      restaurantName,
-      city,
-      country,
-      deliveryPrice,
-      estimatedDeliveryTime,
-      cuisines,
-      menuItems,
-    } = req.body;
+  //   const {
+  //     restaurantName,
+  //     city,
+  //     country,
+  //     deliveryPrice,
+  //     estimatedDeliveryTime,
+  //     cuisines,
+  //     menuItems,
+  //   } = req.body;
 
-    const file = req.files.imageFile[0];
-    const fsPromises = fs.promises;
-    const filename = "imageFile-" + Date.now();
-    const extname = file.originalname.slice(
-      file.originalname.lastIndexOf(".") + 1
-    );
-    const filefullname = filename + "." + extname;
-    await fsPromises.writeFile(
-      path.join("./public/uploads", filefullname),
-      file.buffer
-    );
+  //   const file = req.files.imageFile[0];
+  //   const fsPromises = fs.promises;
+  //   const filename = "imageFile-" + Date.now();
+  //   const extname = file.originalname.slice(
+  //     file.originalname.lastIndexOf(".") + 1
+  //   );
+  //   const filefullname = filename + "." + extname;
+  //   await fsPromises.writeFile(
+  //     path.join("./public/uploads", filefullname),
+  //     file.buffer
+  //   );
 
-    const restaurant = new Restaurant();
-    restaurant.restaurantName = restaurantName;
-    restaurant.city = city;
-    restaurant.country = country;
-    restaurant.deliveryPrice = Number(deliveryPrice);
-    restaurant.estimatedDeliveryTime = Number(estimatedDeliveryTime);
+  //   const restaurant = new Restaurant();
+  //   restaurant.restaurantName = restaurantName;
+  //   restaurant.city = city;
+  //   restaurant.country = country;
+  //   restaurant.deliveryPrice = Number(deliveryPrice);
+  //   restaurant.estimatedDeliveryTime = Number(estimatedDeliveryTime);
 
-    restaurant.cuisines = cuisines;
-    restaurant.menuItems = menuItems.map((item) => ({
-      ...item,
-      _id: mongoose.Types.ObjectId(),
-    }));
+  //   restaurant.cuisines = cuisines;
+  //   restaurant.menuItems = menuItems.map((item) => ({
+  //     ...item,
+  //     _id: mongoose.Types.ObjectId(),
+  //   }));
 
-    restaurant.imageUrl = filefullname;
-    restaurant.user = new mongoose.Types.ObjectId(req.userId);
-    restaurant.lastUpdated = new Date();
+  //   restaurant.imageUrl = filefullname;
+  //   restaurant.user = new mongoose.Types.ObjectId(req.userId);
+  //   restaurant.lastUpdated = new Date();
 
-    //await restaurant.save();
-    restaurant.imageUrl =
-    process.env.VITE_API_BASE_URL + "//uploads/" + restaurant.imageUrl;
-    res.status(201).json(restaurant);
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Something went wrong" });
-  }
+  //   await restaurant.save();
+  //   restaurant.imageUrl =
+  //   process.env.VITE_API_BASE_URL + "//uploads/" + restaurant.imageUrl;
+  //   res.status(201).json(restaurant);
+  // } catch (error) {
+  //   console.log(error);
+  //   res.status(500).json({ message: "Something went wrong" });
+  // }
 };
 
 const editRestaurant = async (req, res) => {
@@ -174,7 +175,7 @@ const editRestaurant = async (req, res) => {
 
     await restaurant.save();
     restaurant.imageUrl =
-    process.env.VITE_API_BASE_URL + "//uploads/" + restaurant.imageUrl;
+      process.env.VITE_API_BASE_URL + "//uploads/" + restaurant.imageUrl;
 
     res.status(200).json(restaurant);
   } catch (error) {
@@ -218,7 +219,7 @@ const getRestaurantOrders = async (req, res) => {
           restaurant: {
             imageUrl: {
               $concat: [
-                process.env.VITE_API_BASE_URL + "//uploads/" ,
+                process.env.VITE_API_BASE_URL + "//uploads/",
                 "$restaurant.imageUrl",
               ],
             },
