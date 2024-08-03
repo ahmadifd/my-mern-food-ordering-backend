@@ -62,10 +62,10 @@ const createRestaurant = async (req, res) => {
       file.originalname.lastIndexOf(".") + 1
     );
     const filefullname = filename + "." + extname;
-    await fsPromises.writeFile(
-      path.join("./public/uploads", filefullname),
-      file.buffer
-    );
+    // await fsPromises.writeFile(
+    //   path.join("./public/uploads", filefullname),
+    //   file.buffer
+    // );
 
     const restaurant = new Restaurant();
     restaurant.restaurantName = restaurantName;
