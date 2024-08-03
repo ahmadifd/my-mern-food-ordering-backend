@@ -62,10 +62,10 @@ const createRestaurant = async (req, res) => {
       file.originalname.lastIndexOf(".") + 1
     );
     const filefullname = filename + "." + extname;
-    // await fsPromises.writeFile(
-    //   path.join("./public/uploads", filefullname),
-    //   file.buffer
-    // );
+    await fsPromises.writeFile(
+      path.join("./public/uploads", filefullname),
+      file.buffer
+    );
 
     const restaurant = new Restaurant();
     restaurant.restaurantName = restaurantName;
@@ -84,7 +84,7 @@ const createRestaurant = async (req, res) => {
     restaurant.user = new mongoose.Types.ObjectId(req.userId);
     restaurant.lastUpdated = new Date();
 
-    await restaurant.save();
+    //await restaurant.save();
     restaurant.imageUrl =
     process.env.VITE_API_BASE_URL + "//uploads/" + restaurant.imageUrl;
     res.status(201).json(restaurant);
