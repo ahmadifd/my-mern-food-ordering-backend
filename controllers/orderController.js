@@ -92,17 +92,18 @@ const createCheckoutSession = async (req, res) => {
     });
 
     let totalPrice = 0;
-    for (let i = 0; i < restaurant.menuItems.length; i++) {
-      const cartitem = checkoutSessionRequest.cartItems.find(
-        (x) => x.menuItemId === restaurant.menuItems[i]._id.toHexString()
+    for (let i = 0; i < checkoutSessionRequest.cartItems.length; i++) {
+      const mitem = restaurant.menuItems.find(
+        (x) =>
+          checkoutSessionRequest.cartItems[i].menuItemId === x._id.toHexString()
       );
 
-      console.log(cartitem);
-
+    
       totalPrice +=
-        parseFloat(cartitem.quantity) * restaurant.menuItems[i].price;
+        parseFloat(mitem.price) * checkoutSessionRequest.cartItems[i].quantity;
     }
 
+ 
     let totalWithDelivery = totalPrice;
     if (restaurant?.deliveryPrice) {
       totalWithDelivery += parseFloat(restaurant.deliveryPrice);

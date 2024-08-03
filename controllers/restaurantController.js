@@ -90,8 +90,6 @@ const searchRestaurant = async (req, res) => {
 
     const total = await Restaurant.countDocuments(query);
 
-    console.log(restaurants);
-
     const response = {
       data: restaurants,
       pagination: {
@@ -100,6 +98,8 @@ const searchRestaurant = async (req, res) => {
         pages: Math.ceil(total / pageSize),
       },
     };
+
+    console.log(response.pagination.total);
 
     res.json(response);
   } catch (error) {

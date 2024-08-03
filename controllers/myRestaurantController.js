@@ -74,7 +74,10 @@ const createRestaurant = async (req, res) => {
     restaurant.estimatedDeliveryTime = Number(estimatedDeliveryTime);
 
     restaurant.cuisines = cuisines;
-    restaurant.menuItems = menuItems;
+    restaurant.menuItems = menuItems.map((item) => ({
+      ...item,
+      _id: mongoose.Types.ObjectId(),
+    }));
 
     restaurant.imageUrl = filefullname;
     restaurant.user = new mongoose.Types.ObjectId(req.userId);
