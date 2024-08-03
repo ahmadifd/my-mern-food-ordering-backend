@@ -6,6 +6,7 @@ import fs from "fs";
 import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const getRestaurant = async (req, res) => {
   if (req.userId === undefined)
@@ -30,6 +31,12 @@ const getRestaurant = async (req, res) => {
 };
 
 const createRestaurant = async (req, res) => {
+  if (!fs.existsSync(path.join(__dirname, "../public/uploads"))) {
+    fs.mkdir(path.join(__dirname, "../public/uploads"), (err) => {
+      if (err) throw err;
+    });
+  }
+
   if (req.userId === undefined)
     return res.status(400).json({
       message: "Error userId",
@@ -62,6 +69,7 @@ const createRestaurant = async (req, res) => {
       file.originalname.lastIndexOf(".") + 1
     );
     const filefullname = filename + "." + extname;
+
     await fsPromises.writeFile(
       path.join("./public/uploads", filefullname),
       file.buffer
@@ -95,6 +103,12 @@ const createRestaurant = async (req, res) => {
 };
 
 const editRestaurant = async (req, res) => {
+  if (!fs.existsSync(path.join(__dirname, "../public/uploads"))) {
+    fs.mkdir(path.join(__dirname, "../public/uploads"), (err) => {
+      if (err) throw err;
+    });
+  }
+
   console.log("editRestaurant");
   if (req.userId === undefined)
     return res.status(400).json({
