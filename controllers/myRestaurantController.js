@@ -32,9 +32,11 @@ const getRestaurant = async (req, res) => {
 
 const createRestaurant = async (req, res) => {
   if (!fs.existsSync(path.join(__dirname, "../public/uploads"))) {
-    fs.mkdir(path.join(__dirname, "../public/uploads"), (err) => {
-      if (err) throw err;
-    });
+    console.log("Hello Farshid");
+
+    // fs.mkdir(path.join(__dirname, "../public/uploads"), (err) => {
+    //   if (err) throw err;
+    // });
   }
 
   // if (req.userId === undefined)
