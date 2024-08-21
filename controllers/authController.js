@@ -31,7 +31,7 @@ const login = async (req, res) => {
       },
     },
     process.env.ACCESS_TOKEN_PRIVATE_KEY,
-    { expiresIn: "5s" }
+    { expiresIn: "15s" }
   );
 
   const refreshToken = jwt.sign(
@@ -88,7 +88,7 @@ const refresh = (req, res) => {
           },
         },
         process.env.ACCESS_TOKEN_PRIVATE_KEY,
-        { expiresIn: "5s" }
+        { expiresIn: "15s" }
       );
 
       res.status(200).json({
@@ -107,9 +107,9 @@ const logOut = async (req, res) => {
   const foundUser = await User.findOne({ refreshToken }).exec();
   if (!foundUser) {
     res.clearCookie("jwt", {
-      httpOnly: false,
-      //sameSite: 'None',
-      secure: false,
+      httpOnly: true,
+      sameSite: "None",
+      secure: true,
     });
     return res.status(204).json({});
   }
@@ -118,9 +118,9 @@ const logOut = async (req, res) => {
   const result = await foundUser.save();
 
   res.clearCookie("jwt", {
-    httpOnly: false,
-    //sameSite: 'None',
-    secure: false,
+    httpOnly: true,
+    sameSite: "None",
+    secure: true,
   });
 
   res.send({ message: "Cookie cleared" });

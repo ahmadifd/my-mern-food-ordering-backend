@@ -10,7 +10,8 @@ export const verifyJWT = (req, res, next) => {
   const token = authHeader.split(" ")[1];
 
   jwt.verify(token, process.env.ACCESS_TOKEN_PRIVATE_KEY, (err, decoded) => {
-    if (err) return res.status(403).json({ message: "" });
+    console.log(token, process.env.ACCESS_TOKEN_PRIVATE_KEY);
+    if (err) return res.status(403).json({ message: err });
     req.userId = decoded.data.userId;
     req.email = decoded.data.email;
     req.roles = decoded.data.roles;

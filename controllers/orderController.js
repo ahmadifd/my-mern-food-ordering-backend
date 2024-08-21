@@ -8,7 +8,11 @@ const getMyOrders = async (req, res) => {
     qry["status"] = "paid";
     const orders = await Order.aggregate([
       //{ $match: qry },
-      { $match: { user: new mongoose.Types.ObjectId(req.userId) } },
+      {
+        $match: {
+          user: mongoose.Types.ObjectId.createFromHexString(req.userId),
+        },
+      },
       {
         $lookup: {
           from: "restaurants",

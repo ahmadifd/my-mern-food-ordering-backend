@@ -12,11 +12,13 @@ import cookieParser from "cookie-parser";
 import { credentials } from "./middleware/credentials.js";
 import path from "path";
 import { fileURLToPath } from "url";
+import fs from "fs";
+import https from "https";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const PORT = process.env.PORT || 3800;
+const PORT = process.env.PORT || 1001;
 
 const app = express();
 
@@ -44,7 +46,16 @@ app.use("/restaurant", restaurantRoutes);
 
 app.use("/order", orderRoutes);
 
+const options = {
+  key: fs.readFileSync(__dirname + "/ssl/private.key", "utf8"),
+  cert: fs.readFileSync(__dirname + "/ssl/cert.crt", "utf8"),
+};
+
 mongoose.connection.once("open", () => {
   console.log("Connected to MongoDB");
-  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+  console.log("Hello Farshid Ahmadi");
+
+  const server = https.createServer(options, app);
+
+  server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 });

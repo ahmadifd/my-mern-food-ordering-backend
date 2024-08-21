@@ -2,6 +2,7 @@ import User from "../models/User.js";
 import jwt from "jsonwebtoken";
 import controller from "../routes/controller.js";
 import bcrypt from "bcrypt";
+import mongoose from "mongoose";
 
 const register = async (req, res) => {
   const { email, name, addressLine1, city, country, roles, password } =
@@ -17,6 +18,7 @@ const register = async (req, res) => {
 
   const hashedPwd = await bcrypt.hash(password, 10);
   const userObject = {
+    _id: new mongoose.Types.ObjectId(),
     name,
     email,
     addressLine1,
@@ -28,6 +30,9 @@ const register = async (req, res) => {
 
   try {
     const user = await User.create(userObject);
+
+    console.log(user);
+
     res.status(201).json({
       message: `New user ${email} created`,
       data: user,

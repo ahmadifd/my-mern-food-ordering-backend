@@ -78,6 +78,7 @@ const createRestaurant = async (req, res) => {
     );
 
     const restaurant = new Restaurant();
+    restaurant._id = new mongoose.Types.ObjectId();
     restaurant.restaurantName = restaurantName;
     restaurant.city = city;
     restaurant.country = country;
@@ -87,11 +88,11 @@ const createRestaurant = async (req, res) => {
     restaurant.cuisines = cuisines;
     restaurant.menuItems = menuItems.map((item) => ({
       ...item,
-      _id: mongoose.Types.ObjectId(),
+      _id: new mongoose.Types.ObjectId(),
     }));
 
     restaurant.imageUrl = filefullname;
-    restaurant.user = new mongoose.Types.ObjectId(req.userId);
+    restaurant.user = mongoose.Types.ObjectId.createFromHexString(req.userId);
     restaurant.lastUpdated = new Date();
 
     await restaurant.save();
@@ -165,8 +166,8 @@ const editRestaurant = async (req, res) => {
 
     restaurant.menuItems = menuItems.map((item) => ({
       _id: item._id
-        ? new mongoose.Types.ObjectId(item._id)
-        : mongoose.Types.ObjectId(),
+        ? mongoose.Types.ObjectId.createFromHexString(item._id)
+        : new mongoose.Types.ObjectId(),
       name: item.name,
       price: item.price,
     }));
